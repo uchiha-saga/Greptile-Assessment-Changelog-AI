@@ -1,13 +1,14 @@
+/* PlanetScale-inspired: dark base + orange accent */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --ps-bg: #0c0c0c;
+  --ps-surface: #171717;
+  --ps-border: #2a2a2a;
+  --ps-text: #fafafa;
+  --ps-text-muted: #a1a1a1;
+  --ps-accent: #ea580c;
+  --ps-accent-hover: #f97316;
+  --background: var(--ps-bg);
+  --foreground: var(--ps-text);
 }
 
 html,
@@ -19,7 +20,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -35,8 +36,53 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+html { color-scheme: dark; }
+
+/* Changelog pages – PlanetScale-style dark */
+.changelogRelease { max-width: 900px; margin: 0 auto; padding: 24px; }
+.changelogReleaseHeader { margin-bottom: 28px; }
+.changelogBack {
+  display: inline-block; margin-bottom: 10px; font-size: 14px;
+  color: var(--ps-accent); text-decoration: none; font-weight: 500;
 }
+.changelogBack:hover { color: var(--ps-accent-hover); text-decoration: underline; }
+.changelogTitle {
+  font-size: 28px; font-weight: 700; margin: 8px 0 8px;
+  color: var(--ps-text); letter-spacing: -0.02em; line-height: 1.25;
+}
+.changelogMeta { font-size: 15px; color: var(--ps-text-muted); margin-top: 6px; font-weight: 500; }
+.changelogRepo { font-size: 14px; color: var(--ps-text-muted); margin-top: 4px; }
+.changelogPublished { font-size: 13px; color: var(--ps-text-muted); margin-top: 8px; opacity: 0.8; }
+.changelogSections { display: flex; flex-direction: column; gap: 20px; }
+.changelogBlock {
+  background: var(--ps-surface); border: 1px solid var(--ps-border); border-radius: 12px;
+  padding: 20px; color: var(--ps-text);
+}
+.changelogBlockTitle {
+  font-size: 17px; font-weight: 700; margin: 0 0 14px; color: var(--ps-text);
+}
+.changelogList { margin: 0; padding-left: 22px; font-size: 15px; line-height: 1.6; color: var(--ps-text-muted); }
+.changelogList li { margin-bottom: 8px; }
+.changelogEmpty { margin: 0; font-size: 15px; color: var(--ps-text-muted); }
+
+/* Changelog list page */
+.changelogListPage { max-width: 800px; margin: 0 auto; padding: 24px; }
+.changelogListHeader { margin-bottom: 24px; }
+.changelogListBack {
+  display: inline-block; margin-bottom: 8px; font-size: 14px;
+  color: var(--ps-accent); text-decoration: none; font-weight: 500;
+}
+.changelogListBack:hover { color: var(--ps-accent-hover); text-decoration: underline; }
+.changelogListTitle { font-size: 28px; font-weight: 700; margin: 8px 0 4px; color: var(--ps-text); }
+.changelogListSub { color: var(--ps-text-muted); margin: 0; font-size: 15px; }
+.changelogListEmpty { color: var(--ps-text-muted); font-size: 15px; }
+.changelogListUl { list-style: none; padding: 0; margin: 0; }
+.changelogListLi {
+  border: 1px solid var(--ps-border); border-radius: 12px; padding: 18px; margin-bottom: 12px;
+  background: var(--ps-surface);
+}
+.changelogListLink { text-decoration: none; color: inherit; display: block; }
+.changelogListLi:hover { border-color: #404040; background: #1f1f1f; }
+.changelogListItemTitle { font-weight: 700; font-size: 18px; margin-bottom: 4px; color: var(--ps-text); }
+.changelogListItemMeta { font-size: 14px; color: var(--ps-text-muted); }
+.changelogListItemDate { font-size: 12px; color: var(--ps-text-muted); margin-top: 4px; opacity: 0.8; }

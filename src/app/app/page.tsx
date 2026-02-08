@@ -29,6 +29,7 @@ type GenerateResponse = {
 const DEFAULT_REPO = "https://github.com/greptileai/superagent";
 
 const DAY_PRESETS = [
+  { label: "From the beginning", value: 0 },
   { label: "Last 5 days", value: 5 },
   { label: "Last 10 days", value: 10 },
   { label: "Last 20 days", value: 20 },
@@ -39,9 +40,21 @@ function formatDateForInput(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
+function getDateRangeLabel(opts: {
+  rangeMode: "preset" | "custom";
+  days: number;
+  since: string;
+  until: string;
+}): string {
+  if (opts.rangeMode === "preset") {
+    const preset = DAY_PRESETS.find((p) => p.value === opts.days);
+    return preset?.label ?? `Last ${opts.days} days`;
+  }
+  return `${opts.since} to ${opts.until}`;
+}
+
 export default function DevAppPage() {
   const [repoUrl, setRepoUrl] = useState(DEFAULT_REPO);
-  const [token, setToken] = useState("");
   const [rangeMode, setRangeMode] = useState<"preset" | "custom">("preset");
   const [days, setDays] = useState<number>(20);
   const [since, setSince] = useState(() =>
@@ -71,7 +84,7 @@ export default function DevAppPage() {
     setDraft(null);
     setLoading(true);
     try {
-      const body: Record<string, unknown> = { repoUrl, token };
+      const body: Record<string, unknown> = { repoUrl };
       if (rangeMode === "preset") {
         body.days = days;
       } else {
@@ -134,6 +147,8 @@ export default function DevAppPage() {
     setError(null);
     setLoading(true);
     try {
+      const dateRange = getDateRangeLabel({ rangeMode, days, since, until });
+      const clean = (arr: string[]) => arr.map((s) => s.trim()).filter(Boolean);
       const r = await fetch("/api/releases", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,7 +156,11 @@ export default function DevAppPage() {
           repo: `${compare.owner}/${compare.repo}`,
           base: compare.base,
           head: compare.head,
-          ...draft,
+          dateRange,
+          title: draft.title,
+          changes: clean(draft.changes),
+          impact: clean(draft.impact),
+          risks: clean(draft.risks),
         }),
       });
       const data = await r.json();
@@ -166,7 +185,7 @@ export default function DevAppPage() {
           </p>
         </div>
         <a className={styles.link} href="/changelog">
-          View public changelog →
+          Changelog →
         </a>
       </header>
 
@@ -178,17 +197,6 @@ export default function DevAppPage() {
               className={styles.input}
               value={repoUrl}
               onChange={(e) => setRepoUrl(e.target.value)}
-            />
-          </label>
-
-          <label className={styles.label}>
-            GitHub PAT (needed for private / higher rate limit)
-            <input
-              className={styles.input}
-              type="password"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
-              placeholder="ghp_..."
             />
           </label>
 
@@ -258,7 +266,7 @@ export default function DevAppPage() {
 
           <div className={styles.rowRight}>
             <button
-              className={styles.button}
+              className={styles.buttonGreen}
               onClick={onFetchCompare}
               disabled={loading}
             >
@@ -390,13 +398,6 @@ export default function DevAppPage() {
                   >
                     Publish
                   </button>
-                  <a
-                    className={styles.link}
-                    href="/changelog"
-                    style={{ marginLeft: 12 }}
-                  >
-                    View changelog →
-                  </a>
                 </div>
               </>
             )}
@@ -423,14 +424,7 @@ function Section({
       <textarea
         className={styles.textarea}
         value={text}
-        onChange={(e) =>
-          onChange(
-            e.target.value
-              .split("\n")
-              .map((s) => s.trim())
-              .filter(Boolean)
-          )
-        }
+        onChange={(e) => onChange(e.target.value.split("\n"))}
         placeholder={`- ...\n- ...`}
       />
     </div>
