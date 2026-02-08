@@ -49,8 +49,10 @@ For submission, include how to run the app and a short screen recording (e.g. 30
 Main idea to add "Risks" section is to help the developers be aware of the potential risks of the changes.
 This will help the developers to debug any issues that may arise from the changes.
 In future implementation, we can add more detailed analysis of the risks. We can also add a "Debugging" section to trace the issues and fix them.
+The UI Theme is inspired by PlanetScale website.
 
-## Learn more
+## References
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [NVIDIA NIM Nemotron 3 Nano](https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3-nano-30b-a3b)
+- [PlanetScale](https://planetscale.com/)
